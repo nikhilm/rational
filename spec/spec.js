@@ -23,7 +23,9 @@ vows.describe('rational')
         },
         'parse output should have no options': function(rat) {
             var ret = rat.parse(['bup']);
-            assert.isUndefined(ret.options);
-        }
+            assert.isObject(ret.options);
+            assert.isArray(ret.flags);
+            assert.isArray(ret.extras);
+        },
     }
 }).export(module);
