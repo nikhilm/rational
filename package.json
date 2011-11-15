@@ -1,0 +1,23 @@
+{
+  "name": "rational",
+  "description": "Natural option parsing",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nikhilm/rational.git"
+  },
+  "author": "Nikhil Marathe <nsm.nikhil@gmail.com> (http://blog.nikhilmarathe.me/)",
+  "main": "lib/bupargs.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "devDependencies": {
+    "vows" : ">= 0.5.9"
+  },
+  "scripts": {
+    "test": "vows"
+  },
+  "engines": {
+    "node": "*"
+  }
+}
