@@ -103,5 +103,21 @@ vows.describe('rational')
             assert.isArray(ret.flags);
             assert.isArray(ret.extras);
         },
+        'invocation with options should fail': function(rat) {
+            assert.throws(function() {rat.parse(['bup', '-v'])});
+        },
+        'parse output extras should be filled': function(rat) {
+            var extras = rat.parse(['bup', 'fn1', 'fn2']).extras;
+            assert.include(extras, 'bup');
+            assert.include(extras, 'fn1');
+            assert.include(extras, 'fn2');
+        },
+        'parse should skip options after --': function(rat) {
+            var fn = function() { return rat.parse(['bup', 'fn1', '--', 'fn2', '-v', '--help']); };
+            assert.doesNotThrow(fn);
+
+            var extras = fn().extras;
+            assert.deepEqual(extras, ['bup', 'fn1', 'fn2', '-v', '--help']);
+        }
     }
 }).export(module);
