@@ -42,13 +42,35 @@ vows.describe('rational')
                             'b,background go to background after startup\n'+
                             'retry-connrefused retry even if connection is refused'),
         '_usageStr should match': function(rat) {
-            rat.usage();
             var lines = rat._usageStr.split('\n');
             assert.equal(lines[0], 'Usage: wget [OPTION...] [URL...]');
             assert.isNotNull(lines[3].match('  -V, --version       \tdisplay the version of Wget and exit'));
             assert.isNotNull(lines[4].match('  -h, --help          \tprint this help'));
             assert.isNotNull(lines[5].match('  -b, --background    \tgo to background after startup'));
             assert.isNotNull(lines[6].match('  --retry-connrefused \tretry even if connection is refused'));
+        }
+    },
+
+    'Usage builder with options and groups': {
+        topic: new Rational('wget [OPTION...] [URL...]\n--\n'+
+                            'V,version display the version of Wget and exit\n'+
+                            'h,help print this help\n'+
+                            '\n'+
+                            ' Advanced\n'+
+                            'b,background go to background after startup\n'+
+                            'retry-connrefused retry even if connection is refused\n'+
+                            ' Vertigo inducing\n'+
+                            'g download at 1Gbps always\n'+
+                            'd DDoS the host'),
+        '_usageStr should match': function(rat) {
+            var lines = rat._usageStr.split('\n');
+            assert.equal(lines[6],  ' Advanced');
+            assert.equal(lines[7],  '  -b, --background    \tgo to background after startup');
+            assert.equal(lines[8],  '  --retry-connrefused \tretry even if connection is refused');
+            assert.equal(lines[9], '');
+            assert.equal(lines[10], ' Vertigo inducing');
+            assert.equal(lines[11], '  -g                  \tdownload at 1Gbps always');
+            assert.equal(lines[12], '  -d                  \tDDoS the host');
         }
     },
 
