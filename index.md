@@ -1,3 +1,8 @@
+---
+title: Rational
+layout: wikistyle
+---
+
 Rational
 ========
 
