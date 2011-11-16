@@ -48,6 +48,12 @@ vows.describe('rational')
             assert.isNotNull(lines[4].match('  -h, --help          \tprint this help'));
             assert.isNotNull(lines[5].match('  -b, --background    \tgo to background after startup'));
             assert.isNotNull(lines[6].match('  --retry-connrefused \tretry even if connection is refused'));
+        },
+        '_options should have properties': function(rat) {
+            ['V', 'version', 'h', 'help',
+            'b', 'background', 'retry-connrefused'].forEach(function(elt) {
+                assert.include(rat._options, elt);
+            });
         }
     },
 
@@ -71,6 +77,12 @@ vows.describe('rational')
             assert.equal(lines[10], ' Vertigo inducing');
             assert.equal(lines[11], '  -g                  \tdownload at 1Gbps always');
             assert.equal(lines[12], '  -d                  \tDDoS the host');
+        },
+        '_options should have properties': function(rat) {
+            ['V', 'version', 'h', 'help',
+            'b', 'background', 'retry-connrefused', 'g', 'd'].forEach(function(elt) {
+                assert.include(rat._options, elt);
+            });
         }
     },
 
