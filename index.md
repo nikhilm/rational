@@ -55,10 +55,12 @@ parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
 
 Tests are written using [vows](http://www.vowsjs.org). To run all tests
 
+    {% highlight bash %}
     $ pwd
     /path/to/rational
     $ npm install . --dev # one time only
     $ make test
+    {% endhighlight %}
 
 ## License
 
