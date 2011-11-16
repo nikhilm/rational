@@ -44,7 +44,7 @@ Tests are written using [vows](http://www.vowsjs.org). To run all tests
     $ pwd
     /path/to/rational
     $ npm install . --dev # one time only
-    $ ./test.sh
+    $ make test
 
 ## License
 

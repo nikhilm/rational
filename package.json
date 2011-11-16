@@ -15,7 +15,8 @@
     "sprintf": ">= 0.1.0"
   },
   "devDependencies": {
-    "vows" : ">= 0.5.9"
+    "vows" : ">= 0.5.9",
+    "dr-js" : ">= 0.0.5"
   },
   "scripts": {
     "test": "vows"

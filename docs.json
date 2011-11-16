@@ -1,0 +1,8 @@
+{
+	"title": "Rational",
+	"output": "docs/rational.html",
+	"files": [{
+		"url": "lib/rational.js",
+		"link": "https://github.com/nikhilm/rational/blob/master/lib/rational.js"
+    }]
+}
