@@ -1,5 +1,6 @@
 ---
 title: Rational
+layout: wikistyle
 ---
 
 <link rel="stylesheet" href="style.css" type="text/css"> </link>
@@ -16,9 +17,7 @@ parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
 
 ## Install
 
-    {% highlight bash %}
     npm install rational
-    {% endhighlight %}
 
 ## Usage
 
