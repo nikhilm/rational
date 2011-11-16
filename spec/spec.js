@@ -119,5 +119,44 @@ vows.describe('rational')
             var extras = fn().extras;
             assert.deepEqual(extras, ['bup', 'fn1', 'fn2', '-v', '--help']);
         }
+    },
+
+    'Parse with options': {
+        topic: new Rational('wget [OPTION...] [URL...]\n--\n'+
+                            'V,version display the version of Wget and exit\n'+
+                            'h,help print this help\n'+
+                            '\n'+
+                            ' Advanced\n'+
+                            'b,background go to background after startup\n'+
+                            'retry-connrefused retry even if connection is refused\n'+
+                            ' Vertigo inducing\n'+
+                            'g download at 1Gbps always\n'+
+                            'd DDoS the host'),
+        'parse should succeed with just command': function(ret) {
+            var result = ret.parse(['wget']);
+            assert.deepEqual(result.extras, ['wget']);
+        },
+        'parse should succeed with positional parameters': function(ret) {
+            var result = ret.parse(['wget', 'http://www.google.com', 'http://nodejs.org']);
+            assert.deepEqual(result.extras, ['wget', 'http://www.google.com', 'http://nodejs.org']);
+        },
+        'parse should succeed with specified options': function(ret) {
+            var fn = function() {
+                ret.parse(['wget', '-V']);
+                ret.parse(['wget', '--version']);
+                ret.parse(['wget', '-b', '-g', '-d', '--retry-connrefused']);
+            }
+
+            assert.doesNotThrow(fn);
+
+            var result = ret.parse(['wget', '-b', '-g', '-d', '--retry-connrefused']);
+            ['b', 'g', 'd', 'retry-connrefused'].forEach(function(option) {
+                assert.isTrue(result.options[option]);
+            });
+
+            ['V', 'version', 'h'].forEach(function(option) {
+                assert.isFalse(result.options[option]);
+            });
+        },
     }
 }).export(module);
