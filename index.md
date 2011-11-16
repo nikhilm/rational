@@ -16,7 +16,9 @@ parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
 
 ## Install
 
+    {% highlight bash %}
     npm install rational
+    {% endhighlight %}
 
 ## Usage
 
@@ -64,3 +66,7 @@ Rational is licensed under the 3-clause Modified BSD License.
 ## Contributions
 
 Fork and send a pull request :)
+
+## Author
+
+Rational is made by [Nikhil Marathe](https://github.com/nikhilm).
