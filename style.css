@@ -1,0 +1,20 @@
+body {
+    width: 50%;
+    margin: auto;
+}
+
+@font-face {
+    font-family: 'Lobster';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Lobster'), url('../lobster.ttf') format('truetype');
+}
+
+h1, h2 {
+    font-family: 'Lobster', 'Helvetica', cursive;
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 20px;
+}

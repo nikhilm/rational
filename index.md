@@ -3,6 +3,8 @@ title: Rational
 layout: wikistyle
 ---
 
+<link rel="stylesheet" href="style.css" type="text/css"> </link>
+
 Rational
 ========
 
