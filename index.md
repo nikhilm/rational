@@ -1,6 +1,5 @@
 ---
 title: Rational
-layout: wikistyle
 ---
 
 <link rel="stylesheet" href="style.css" type="text/css"> </link>
@@ -22,6 +21,7 @@ parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
 
 [API reference](reference.html)
 
+    {% highlight javascript %}
     var Rational = require('rational').Rational;
     // I swear this is cleaner in CoffeeScript :)
     var parser = new Rational('wget [OPTION...] [URL...]\n--\n'+
@@ -45,6 +45,7 @@ parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
 
     // positional arguments
     var urls = result.extras;
+    {% endhighlight %}
 
 ## Tests
 
