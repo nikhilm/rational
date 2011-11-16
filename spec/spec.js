@@ -7,11 +7,31 @@ var onlySynopsis = 'bup save [-tc] [-n name] <filenames...>';
 
 vows.describe('rational')
 .addBatch({
-    'only synopsis': {
-        topic: new Rational(onlySynopsis),
-        'usage should match': function (rat) {
-            assert.equal(rat._usageStr, onlySynopsis);
+    'Usage builder with no options': {
+        '_usageStr should give usage': {
+            topic: new Rational('rational'),
+            'usage should match': function (rat) {
+                assert.equal(rat._usageStr, 'Usage: rational');
+            }
         },
+
+        '_usageStr should give multiple invocations': {
+            topic: new Rational('rational\nrational <filenames...>'),
+            'usage should match': function(rat) {
+                assert.equal(rat._usageStr, 'Usage: rational\n    or rational <filenames...>');
+            }
+        },
+
+        'stop processing on --': {
+            topic: new Rational('rational\n--\nrational <filenames...>'),
+            'usage should only be rational': function(rat) {
+                assert.equal(rat._usageStr, 'Usage: rational');
+            }
+        }
+    },
+
+    'Parse with no options': {
+        topic: new Rational(onlySynopsis),
         'parse should succeed with just command': function(rat) {
             assert.ok(rat.parse(['bup']));
 
