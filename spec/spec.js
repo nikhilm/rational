@@ -158,5 +158,19 @@ vows.describe('rational')
                 assert.isFalse(result.options[option]);
             });
         },
+        'parse should fail with unspecified options': function(ret) {
+            var fnThrow = function(args) {
+                assert.throws(function() {
+                    return ret.parse(args);
+                });
+            };
+
+            fnThrow(['wget', '-x']);
+            fnThrow(['wget', '-v']); //lowercase
+            fnThrow(['wget', '-V', '-b', '--background', '--expect']);
+        },
+        'all forms of an option should be set correctly': function(ret) {
+            throw new Error('TODO');
+        }
     }
 }).export(module);
