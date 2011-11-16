@@ -21,4 +21,9 @@ h1 {
 
 h2 {
     font-size: 30px;
-o
+}
+
+pre {
+    background: #222;
+    padding: 20px 10px;
+}
