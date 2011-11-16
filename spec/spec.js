@@ -123,7 +123,7 @@ vows.describe('rational')
 
     'Parse with options': {
         topic: new Rational('wget [OPTION...] [URL...]\n--\n'+
-                            'V,version display the version of Wget and exit\n'+
+                            'V,v,version display the version of Wget and exit\n'+
                             'h,help print this help\n'+
                             '\n'+
                             ' Advanced\n'+
@@ -166,11 +166,24 @@ vows.describe('rational')
             };
 
             fnThrow(['wget', '-x']);
-            fnThrow(['wget', '-v']); //lowercase
+            fnThrow(['wget', '--mental']);
             fnThrow(['wget', '-V', '-b', '--background', '--expect']);
         },
         'all forms of an option should be set correctly': function(ret) {
-            throw new Error('TODO');
+            var options = ret.parse(['wget', '-V']).options;
+            assert.isTrue(options.V);
+            assert.isTrue(options.v);
+            assert.isTrue(options.version);
+
+            options = ret.parse(['wget', '--version']).options;
+            assert.isTrue(options.V);
+            assert.isTrue(options.v);
+            assert.isTrue(options.version);
+
+            options = ret.parse(['wget', '-v']).options;
+            assert.isTrue(options.V);
+            assert.isTrue(options.v);
+            assert.isTrue(options.version);
         }
     }
 }).export(module);
