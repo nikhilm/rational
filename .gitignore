@@ -1,0 +1,4 @@
+*.pyc
+options.py
+t.py
+node_modules
