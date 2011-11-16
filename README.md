@@ -16,15 +16,16 @@ parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
     var Rational = require('rational').Rational;
     // I swear this is cleaner in CoffeeScript :)
     var parser = new Rational('wget [OPTION...] [URL...]\n--\n'+
-                            'V,version display the version of Wget and exit\n'+
-                            'h,help print this help\n'+
-                            '\n'+
+                            'V,version         display the version of Wget and exit\n'+
+                            'h,help            print this help\n'+
+
                             ' Advanced\n'+
-                            'b,background go to background after startup\n'+
+                            'b,background      go to background after startup\n'+
                             'retry-connrefused retry even if connection is refused\n'+
+
                             ' Vertigo inducing\n'+
-                            'g download at 1Gbps always\n'+
-                            'd DDoS the host');
+                            'g                 download at 1Gbps always\n'+
+                            'd                 DDoS the host');
 
     // invoked with wget --no-retry-connrefused -d
     var result = parser.parse(process.argv);
