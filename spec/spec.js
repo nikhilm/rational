@@ -187,6 +187,35 @@ vows.describe('rational')
             assert.equal(1, options.V);
             assert.equal(1, options.v);
             assert.equal(1, options.version);
+        },
+        'handle multiple short options together': function(ret) {
+            fn = function() {
+                return ret.parse(['wget', '-vVb', '--retry-connrefused', '--background']);
+            }
+
+            assert.doesNotThrow(fn);
+
+            var ret = fn();
+            assert.equal(ret.options.v, 2);
+            assert.equal(ret.options.b, 2);
+            assert.equal(ret.options['retry-connrefused'], 1);
+            assert.deepEqual(ret.flags, [['-vVb', ''], ['--retry-connrefused', ''], ['--background', '']]);
+        },
+        'multiple short options together shouldn\'t allow unspecified options': function(ret) {
+            fn = function() {
+                return ret.parse(['wget', '-vVbxg']);
+            }
+
+            assert.throws(fn);
+        },
+        'don\'t treat long option as multiple short options': function(ret) {
+            fn = function(args) {
+                return function() {
+                    return ret.parse(args);
+                }
+            }
+
+            assert.throws(fn(['wget', '--gbv']));
         }
     },
 
