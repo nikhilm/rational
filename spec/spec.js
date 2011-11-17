@@ -241,9 +241,99 @@ vows.describe('rational')
             ret = rat.parse(['wget', '--retry-connrefused', '--retry-connrefused']);
             assert.equal(ret.options['retry-connrefused'], 2);
             assert.deepEqual(ret.flags, [['--retry-connrefused', ''], ['--retry-connrefused', '']]);
+        }
+    },
 
+    'Handle valued options': {
+        topic: new Rational('wget\n--\n'+
+                            'o,output-file= log all messages to log-file\n'+
+                            'd,debug debug output\n'+
+                            'progress= type of progress bar\n'+
+                            't,tries= Maximum number of tries before giving up'),
+        'correctness': function(rat) {
+            var ret = rat.parse(['wget', '-o', 'log']);
+            assert.equal(ret.options.o, 'log');
+            assert.equal(ret.options['output-file'], 'log');
 
+            ret = rat.parse(['wget', '-d', '--debug', '--progress=bar', '-t', '5']);
+            assert.equal(ret.options.debug, 2);
+            assert.equal(ret.options.progress, 'bar');
+            assert.equal(ret.options.tries, '5');
 
+            ret = rat.parse(['wget', '-d', '--debug', '--progress=bar', '-t', '5', '--progress=spinner']);
+            assert.equal(ret.options.debug, 2);
+            assert.equal(ret.options.progress, 'spinner');
+            assert.equal(ret.options.tries, '5');
+
+            assert.throws(function() {
+                rat.parse(['wget', '-o=log']);
+            });
+            assert.throws(function() {
+                rat.parse(['wget', '--progress']);
+            });
+        },
+        'short options should consume next argument': function(rat) {
+            var ret = rat.parse(['wget', '-o', 'log', 'url', '-o', 'actual', 'anotherurl']);
+            assert.deepEqual(ret.flags, [['-o', 'log'], ['-o', 'actual']]);
+            assert.deepEqual(ret.extras, ['wget', 'url', 'anotherurl']);
+
+            assert.throws(function() {
+                rat.parse(['wget', '-t']);
+            });
+        },
+
+        'long options should split on "="': function(rat) {
+            ret = rat.parse(['wget', '-d', '--debug', '--progress=bar', '-t', '5']);
+            assert.deepEqual(ret.flags, [['-d', ''], ['--debug', ''], ['--progress', 'bar'], ['-t', '5']]);
+        },
+
+        'option should take last value in case of multiple counts': function(rat) {
+            var ret = rat.parse(['wget', '-o', 'log', 'url', '-o', 'actual', 'anotherurl']);
+            assert.equal(ret.options['output-file'], 'actual');
+
+            ret = rat.parse(['wget', '-t', '5', 'url', '--tries=42']);
+            assert.equal(ret.options.t, '42');
+
+            ret = rat.parse(['wget', '--progress', 'spinner', '--progress=bar']);
+            assert.equal(ret.options.progress, 'bar');
+        },
+
+        'non string option should treat next argument as positional parameter': function(rat) {
+            var ret = rat.parse(['wget', '-d', 'url', '--output-file=ln', '-o', 'oops']);
+            assert.equal(ret.options.o, 'oops');
+            assert.deepEqual(ret.extras, ['wget', 'url']);
+        }
+    },
+
+    'Handle default valued options': {
+        topic: new Rational('wget\n--\n'+
+                            'o,output-file= log all messages to log-file\n'+
+                            'd,debug debug output [crap]\n'+
+                            'progress= [bar] type of progress bar\n'+
+                            't,tries= Maximum number of tries before giving up [42]\n'+
+                            'r= display in roman numerals'),
+        '_usageStr shows default value': function(rat) {
+        console.error('\n');
+        rat.usage();
+            var lines = rat._usageStr.split('\n');
+            assert.notEqual(lines[5].indexOf('Default: bar'), -1);
+            assert.notEqual(lines[6].indexOf('Default: 42'), -1);
+
+            assert.equal(lines[4].indexOf('Default: crap'), -1);
+        },
+
+        'default value is assigned': function(rat) {
+            var ret = rat.parse(['wget']);
+            assert.equal(ret.options.progress, 'bar');
+            assert.equal(ret.options.t, '42');
+            assert.equal(ret.options.tries, '42');
+        },
+
+        'default value is overridden': function(rat) {
+            var ret = rat.parse(['wget', '--progress=spinner']);
+            assert.equal(ret.options.progress, 'spinner');
+            assert.equal(ret.options.t, '42');
+            assert.equal(ret.options.tries, '42');
         }
     }
 }).export(module);
