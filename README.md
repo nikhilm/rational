@@ -7,11 +7,15 @@ It is based on [bup's option
 parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
 [corresponding blog post](http://apenwarr.ca/log/?m=201111#02).
 
+It supports boolean/integer and string values, with support for defaults.
+
 ## Install
 
     npm install rational
 
 ## Usage
+
+[API reference](http://nikhilm.github.com/rational/rational.html)
 
     var Rational = require('rational').Rational;
     // I swear this is cleaner in CoffeeScript :)
