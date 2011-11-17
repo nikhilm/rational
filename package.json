@@ -7,7 +7,7 @@
     "url": "git://github.com/nikhilm/rational.git"
   },
   "author": "Nikhil Marathe <nsm.nikhil@gmail.com> (http://blog.nikhilmarathe.me/)",
-  "main": "lib/bupargs.js",
+  "main": "lib/rational.js",
   "directories": {
     "lib": "lib"
   },
