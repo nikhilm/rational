@@ -15,6 +15,8 @@ It is based on [bup's option
 parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
 [corresponding blog post](http://apenwarr.ca/log/?m=201111#02).
 
+It supports boolean/integer and string values, with support for defaults.
+
 ## Install
 
     {% highlight bash %}
@@ -23,7 +25,7 @@ parser](https://github.com/apenwarr/bup/blob/master/lib/bup/options.py) and the
 
 ## Usage
 
-[API reference](reference.html)
+[API reference](rational.html)
 
     {% highlight javascript %}
     var Rational = require('rational').Rational;
