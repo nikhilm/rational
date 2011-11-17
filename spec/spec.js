@@ -135,10 +135,12 @@ vows.describe('rational')
         'parse should succeed with just command': function(ret) {
             var result = ret.parse(['wget']);
             assert.deepEqual(result.extras, ['wget']);
+            assert.isEmpty(result.flags);
         },
         'parse should succeed with positional parameters': function(ret) {
             var result = ret.parse(['wget', 'http://www.google.com', 'http://nodejs.org']);
             assert.deepEqual(result.extras, ['wget', 'http://www.google.com', 'http://nodejs.org']);
+            assert.isEmpty(result.flags);
         },
         'parse should succeed with specified options': function(ret) {
             var fn = function() {
@@ -153,6 +155,7 @@ vows.describe('rational')
             ['b', 'g', 'd', 'retry-connrefused'].forEach(function(option) {
                 assert.equal(result.options[option], 1);
             });
+            assert.deepEqual(result.flags, [['-b', ''], ['-g', ''], ['-d', ''], ['--retry-connrefused', '']]);
 
             ['V', 'version', 'h'].forEach(function(option) {
                 assert.equal(result.options[option], 0);
@@ -186,25 +189,32 @@ vows.describe('rational')
             assert.equal(1, options.version);
         }
     },
+
     'Handle counts': {
         topic: new Rational('wget [OPTION...] [URL...]\n--\n'+
                             'V,v,version display the version of Wget and exit\n'+
                             'retry-connrefused retry even if connection is refused\n'),
         'version counts should match': function(rat) {
-            var fn = function(args) {
-                return rat.parse(args).options;
-            }
-            var ret = fn(['wget', '-v', '-v', '-v']);
-            assert.equal(ret.v, 3);
+            var ret = rat.parse(['wget', '-v', '-v', 'doSomethingElse', '-v']);
+            assert.equal(ret.options.v, 3);
+            assert.deepEqual(ret.flags, [['-v', ''], ['-v', ''], ['-v', '']]);
+            assert.deepEqual(ret.extras, ['wget', 'doSomethingElse']);
 
-            ret = fn(['wget', '-v', '-V']);
-            assert.equal(ret.V, 2);
+            ret = rat.parse(['wget', '-v', '-V']);
+            assert.equal(ret.options.V, 2);
+            assert.deepEqual(ret.flags, [['-v', ''], ['-V', '']]);
 
-            ret = fn(['wget', '-v', '--version', '-V']);
-            assert.equal(ret.version, 3);
+            ret = rat.parse(['wget', '-v', '--version', 'http://www.google.com', '--', '-V', 'http://www.nikhilmarathe.me']);
+            assert.equal(ret.options.version, 2);
+            assert.deepEqual(ret.flags, [['-v', ''], ['--version', '']]);
+            assert.deepEqual(ret.extras, ['wget', 'http://www.google.com', '-V', 'http://www.nikhilmarathe.me']);
 
-            ret = fn(['wget', '--retry-connrefused', '--retry-connrefused']);
-            assert.equal(ret['retry-connrefused'], 2);
+            ret = rat.parse(['wget', '--retry-connrefused', '--retry-connrefused']);
+            assert.equal(ret.options['retry-connrefused'], 2);
+            assert.deepEqual(ret.flags, [['--retry-connrefused', ''], ['--retry-connrefused', '']]);
+
+
+
         }
     }
 }).export(module);
