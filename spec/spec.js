@@ -151,11 +151,11 @@ vows.describe('rational')
 
             var result = ret.parse(['wget', '-b', '-g', '-d', '--retry-connrefused']);
             ['b', 'g', 'd', 'retry-connrefused'].forEach(function(option) {
-                assert.isTrue(result.options[option]);
+                assert.equal(result.options[option], 1);
             });
 
             ['V', 'version', 'h'].forEach(function(option) {
-                assert.isFalse(result.options[option]);
+                assert.equal(result.options[option], 0);
             });
         },
         'parse should fail with unspecified options': function(ret) {
@@ -171,19 +171,40 @@ vows.describe('rational')
         },
         'all forms of an option should be set correctly': function(ret) {
             var options = ret.parse(['wget', '-V']).options;
-            assert.isTrue(options.V);
-            assert.isTrue(options.v);
-            assert.isTrue(options.version);
+            assert.equal(1, options.V);
+            assert.equal(1, options.v);
+            assert.equal(1, options.version);
 
             options = ret.parse(['wget', '--version']).options;
-            assert.isTrue(options.V);
-            assert.isTrue(options.v);
-            assert.isTrue(options.version);
+            assert.equal(1, options.V);
+            assert.equal(1, options.v);
+            assert.equal(1, options.version);
 
             options = ret.parse(['wget', '-v']).options;
-            assert.isTrue(options.V);
-            assert.isTrue(options.v);
-            assert.isTrue(options.version);
+            assert.equal(1, options.V);
+            assert.equal(1, options.v);
+            assert.equal(1, options.version);
+        }
+    },
+    'Handle counts': {
+        topic: new Rational('wget [OPTION...] [URL...]\n--\n'+
+                            'V,v,version display the version of Wget and exit\n'+
+                            'retry-connrefused retry even if connection is refused\n'),
+        'version counts should match': function(rat) {
+            var fn = function(args) {
+                return rat.parse(args).options;
+            }
+            var ret = fn(['wget', '-v', '-v', '-v']);
+            assert.equal(ret.v, 3);
+
+            ret = fn(['wget', '-v', '-V']);
+            assert.equal(ret.V, 2);
+
+            ret = fn(['wget', '-v', '--version', '-V']);
+            assert.equal(ret.version, 3);
+
+            ret = fn(['wget', '--retry-connrefused', '--retry-connrefused']);
+            assert.equal(ret['retry-connrefused'], 2);
         }
     }
 }).export(module);
